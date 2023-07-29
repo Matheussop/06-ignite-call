@@ -6,6 +6,8 @@ import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { api } from '@/src/lib/axios'
+import { AxiosError } from 'axios'
 
 const TextHeader =
   'Precisamos de algumas informações para criar seu perfil! Ah, você pode editar essas informações depois.'
@@ -42,7 +44,15 @@ export function Register() {
   }, [router.query?.username, setValue])
 
   async function handleRegister(data: RegisterFormData) {
-    console.log(data)
+    const { username, name } = data
+    try {
+      const user = await api.post('/users', { name, username })
+      console.log('Usuário criado com sucesso', user)
+    } catch (err) {
+      if (err instanceof AxiosError && err?.response?.data?.message) {
+        alert(err.response.data.message)
+      } else console.log(err)
+    }
   }
 
   return (
