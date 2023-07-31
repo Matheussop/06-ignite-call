@@ -1,17 +1,14 @@
 import { Button, Heading, MultiStep, Text } from '@ignite-ui/react'
 import { Container, Header } from '../styles'
 import { ArrowRight, Check } from 'phosphor-react'
-import { api } from '@/src/lib/axios'
-import { AxiosError } from 'axios'
 import { AuthError, ConnectBox, ConnectItem } from './styles'
 import { signIn, useSession } from 'next-auth/react'
-import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
 const TextHeader =
   'Conecte o seu calendário para verificar automaticamente as horas ocupadas e os novos eventos à medida em que são agendados.'
 
-export function Register() {
+export function ConnectCalendar() {
   const session = useSession()
   const router = useRouter()
 
@@ -20,6 +17,10 @@ export function Register() {
 
   async function handleConnect() {
     signIn('google', { callbackUrl: '/register/connect-calendar' })
+  }
+
+  async function handleNextStep() {
+    router.push('/register/time-intervals')
   }
 
   return (
@@ -57,7 +58,7 @@ export function Register() {
             habilitou as permissões de acesso ao Google Calendar
           </AuthError>
         )}
-        <Button type="submit" disabled={!isSignedIn}>
+        <Button type="submit" disabled={!isSignedIn} onClick={handleNextStep}>
           Próximo passo
           <ArrowRight />
         </Button>
@@ -66,4 +67,4 @@ export function Register() {
   )
 }
 
-export default Register
+export default ConnectCalendar
