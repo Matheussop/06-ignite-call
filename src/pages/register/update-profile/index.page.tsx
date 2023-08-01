@@ -19,12 +19,12 @@ import { useSession } from 'next-auth/react'
 import { buildNextAuthOptions } from '../../api/auth/[...nextauth].api'
 import { getServerSession } from 'next-auth'
 import { GetServerSideProps, NextPageContext } from 'next'
+import { api } from '@/src/lib/axios'
 
 const TextHeader = 'Por último, uma breve descrição e uma foto de perfil.'
 
 const updateProfileFormSchema = z.object({
   bio: z.string(),
-  characterProfile: z.string(),
 })
 
 type UpdateProfileFormData = z.infer<typeof updateProfileFormSchema>
@@ -43,7 +43,11 @@ export default function UpdateProfile() {
   const session = useSession()
 
   async function handleUpdateProfile(data: UpdateProfileFormData) {
-    console.log(data)
+    await api.put('/users/profile', {
+      bio: data.bio,
+    })
+
+    await router.push(`/schedule/${session.data?.user.username}`)
   }
 
   async function handleChangeProfileImg() {
@@ -60,13 +64,13 @@ export default function UpdateProfile() {
       <ProfileBox as="form" onSubmit={handleSubmit(handleUpdateProfile)}>
         <Text size="sm">Foto de perfil</Text>
         <ProfileAvatar>
-          <Avatar src={session.data?.user.avatar_url} />
+          <Avatar
+            src={session.data?.user.avatar_url}
+            alt={session.data?.user.name}
+          />
           <Button onClick={handleChangeProfileImg} variant="secondary">
             Selecionar foto
           </Button>
-          {errors.characterProfile && (
-            <FormError size="sm">{errors.characterProfile.message}</FormError>
-          )}
         </ProfileAvatar>
         <label>
           <Text size="sm">Sobre você</Text>
