@@ -1,6 +1,6 @@
 import { Box, Text, styled } from '@ignite-ui/react'
 
-export const IntevalBox = styled(Box, {
+export const IntervalBox = styled(Box, {
   marginTop: '$6',
   display: 'flex',
   flexDirection: 'column',

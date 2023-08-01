@@ -14,7 +14,7 @@ import {
   IntervalInputs,
   IntervalItem,
   IntervalsContainer,
-  IntevalBox,
+  IntervalBox,
 } from './styles'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -24,6 +24,7 @@ import {
   getWeekDays,
 } from '@/src/ultis/get-week-days'
 import { api } from '../../../lib/axios'
+import { useRouter } from 'next/router'
 
 const TextHeader =
   'Defina o intervalo de horários que você está disponível em cada dia da semana.'
@@ -91,6 +92,7 @@ export function TimeIntervals() {
     },
   })
 
+  const router = useRouter()
   const weekDays = getWeekDays()
 
   const { fields } = useFieldArray({
@@ -101,9 +103,13 @@ export function TimeIntervals() {
   const intervals = watch('intervals')
   async function handleSetTimeIntervals(data: TimeIntervalsFormOutput) {
     const { intervals } = data as TimeIntervalsFormOutput
-    await api.post('/users/time-intervals', {
+    const resultRequest = await api.post('/users/time-intervals', {
       intervals,
     })
+
+    if (resultRequest.status === 201) {
+      router.push('/register/update-profile')
+    }
   }
 
   return (
@@ -113,7 +119,7 @@ export function TimeIntervals() {
         <Text>{TextHeader}</Text>
         <MultiStep size={4} currentStep={3} />
       </Header>
-      <IntevalBox as="form" onSubmit={handleSubmit(handleSetTimeIntervals)}>
+      <IntervalBox as="form" onSubmit={handleSubmit(handleSetTimeIntervals)}>
         <IntervalsContainer>
           {fields.map((field, index) => {
             return (
@@ -162,7 +168,7 @@ export function TimeIntervals() {
           Próximo passo
           <ArrowRight />
         </Button>
-      </IntevalBox>
+      </IntervalBox>
     </Container>
   )
 }
