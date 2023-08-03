@@ -22,7 +22,7 @@ import { useFieldArray, useForm, Controller } from 'react-hook-form'
 import {
   convertTimeStringToMinutes,
   getWeekDays,
-} from '@/src/ultis/get-week-days'
+} from '@/src/utils/get-week-days'
 import { api } from '../../../lib/axios'
 import { useRouter } from 'next/router'
 
@@ -93,7 +93,7 @@ export function TimeIntervals() {
   })
 
   const router = useRouter()
-  const weekDays = getWeekDays()
+  const weekDays = getWeekDays({})
 
   const { fields } = useFieldArray({
     control,
