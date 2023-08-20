@@ -1,4 +1,4 @@
-import { NextApiRequest, NextApiResponse, NextPageContext } from 'next'
+import { NextApiRequest, NextApiResponse } from 'next'
 import { getServerSession } from 'next-auth'
 import { buildNextAuthOptions } from '../auth/[...nextauth].api'
 import { z } from 'zod'
