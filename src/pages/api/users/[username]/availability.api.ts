@@ -65,13 +65,19 @@ export default async function handler(
       date: {
         gte: referenceDate.set('hour', startHour).toDate(),
         lte: referenceDate.set('hour', endHour).toDate(),
-      }
-    }
+      },
+    },
   })
 
-  const availableTimes = possibleTimes.filter(
-    time => !blockedTimes.some(
-      (blockedTime: any) => blockedTime.date.getHours() === time))
+  const availableTimes = possibleTimes.filter((time) => {
+    const isTimeBlocked = blockedTimes.some(
+      (blockedTime) => blockedTime.date.getHours() === time,
+    )
+
+    const isTimeInPast = referenceDate.set('hour', time).isBefore(new Date())
+
+    return !isTimeBlocked && !isTimeInPast
+  })
 
   return res.json({ possibleTimes, availableTimes })
 }
