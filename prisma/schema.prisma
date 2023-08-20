@@ -71,8 +71,9 @@ model Scheduling {
   email        String
   observations String?
   created_at   DateTime @default(now())
-  user         User     @relation(fields: [user_id], references: [id])
-  user_id      String
+
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
 
   @@map("schedulings")
 }
